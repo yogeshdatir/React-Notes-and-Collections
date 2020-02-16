@@ -1,0 +1,50 @@
+1. What Is React JS?
+
+    React JS is an open source and component based JavaScript library used for creating dynamic and interactive user interfaces, 
+	especially for single page applications. It is highly flexible, declarative and efficient for developing scalable, simple, 
+	and fast front-end for web & mobile applications. React JS effectively handles the view layer of mobile and web app.
+
+	It allows developers to create intuitive, interactive and engaging applications with minimum coding and the best 
+	rendering performance. With the JavaScript library, developers can build large scale applications without reloading 
+	the page where data reflect in real-time.
+
+2. Why React?
+
+	i. Reusable Components
+	 - As a Result,
+	   (1) your app has consistent look and feel, 
+	   (2) code re-use makes it easier to maintain and grow your codebase, and \
+	   (3) it is easier to develop your app.
+
+	ii. Fast render with Virtual DOM
+	 - Any view changes are first reflected to virtual DOM, then an efficient diff algorithm compares the previous and current
+	   states of the virtual DOM and calculates the best way (minimum amount of updates needed) to apply these changes. 
+	   Finally those updates are applied to the DOM to ensure minimum read/write time.
+	   
+	iii. Clean Abstraction
+	 - Compare this to Angular: Why on earth should you have to learn an internal process such as digest cycles? 
+	   Those kind of details better be kept as internals to provide a clean abstraction. 
+	   You only need to understand a component’s life cycles, states and props to master React to accomplish everything you need. 
+	   React does not dictate any patterns or architecture like MVC/MVVM, after all its only about the view layer and 
+	   you are free to design your app’s architecture in any way you see fit.
+	   
+	iv. Flux and Redux
+	 - Flux architecture is introduced and maintained by Facebook and they use it for their web applications. 
+	   It complements React components by unidirectional data flow. 
+	   The overall structure is as follows.
+	   Image from : https://facebook.github.io/flux/docs/in-depth-overview.html#structure-and-data-flow
+       The main idea is to create actions which are orchestrated by a central dispatcher to update stores. 
+	   Then the views are updated with respect to the changes in that stores. 
+	   All the data to be displayed by components are kept in stores and are not duplicated as models in MVC structure 
+	   which saves you from trying to keep your model data in sync throughout the application all the time.
+	   
+	v. Great Developer Tools
+	 - React Developer Tools and Redux Developer Tools
+	 
+	vi. Fast Learning Curve
+	
+Reference: 
+	https://stories.jotform.com/7-reasons-why-you-should-use-react-ad420c634247
+	https://reactjs.org/docs/design-principles.html
+	
+	
