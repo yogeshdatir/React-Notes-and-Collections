@@ -1,0 +1,90 @@
+const redux = require("redux")
+
+// Actions:
+// Actions are payloads of information that send data from your application to your store. 
+// They are the only source of information for the store. 
+// You send them to the store using store.dispatch().
+// An action usually represents some kind of event – like the beginning of an API call, or a user logging in.
+
+// Actions are just plain javascript objects:
+// Syntax: {
+//    type: "TYPE_IN_ALL_CAPS",
+//    payload: data to be sent to the store
+// }
+
+
+// Action Creator: 
+// An action creator is a plain  (factory) function that returns an action object. 
+
+// Because it can be error-prone and annoying to type out these action objects by hand whenever you need one
+// (or, let’s be honest – copy and paste them), it’s common to hand off the creation to an action creator.
+
+
+// This function is action creator.
+function changeCount(amount = 1) {
+    // This function returns an action object.
+    return {
+        type: "CHANGE_COUNT",
+        payload: amount
+    }
+}
+
+function addFavoriteThing(thing) {
+    return {
+		
+		// type field should be a string.
+        type: "ADD_FAVORITE_THING",
+        payload: thing
+    }
+}
+
+// State is the data used by entire application at a common place. 
+// It is nothing but a plain javascript object, generally. Though it can be any serializable object like map.
+
+const initialState = {
+    count: 0,
+    favoriteThings: []
+}
+
+// Reducer:
+// Reducers specify how the application's state changes in response to actions sent to the store. 
+
+// Remember that actions only describe what happened, but don't describe how the application's state changes.
+
+// Reducer takes action and creates or re-creates state and override the previous state in the store using Redux's createStore method.
+
+function reducer(state = initialState, action) {
+    switch(action.type) {
+        case "CHANGE_COUNT":
+            return {
+                ...state,
+                count: state.count + action.payload
+            }
+        case "ADD_FAVORITE_THING":
+            return {
+                ...state,
+                favoriteThings: [...state.favoriteThings, action.payload]
+            }
+        default:
+            return state
+    }
+}
+
+// createStore creates / initializes "the only" store for the app.
+
+const store = redux.createStore(reducer)
+
+// subscribe is called every time the state is changed.
+
+store.subscribe(() => {
+    console.log(store.getState())
+})
+
+// dispatch takes action, 
+// goes through reducer, 
+// creates new state,
+// sends it to store.
+
+store.dispatch(changeCount(2))
+store.dispatch(addFavoriteThing("Raindrops on roses"))
+store.dispatch(addFavoriteThing("Whiskers on kittens"))
