@@ -89,6 +89,10 @@ After this, you can access the state object from ThemeContext globally. (Use Rea
 
 ##### <u>**ii. To access/consume the state:**</u>
 
+###### a. Using **`contextType`**
+
+This method can be used only in class components.
+
 **`Navbar.js`**
 
 ```react
@@ -119,4 +123,35 @@ export default class Navbar extends Component {
 }
 ```
 
+###### b. Using **`Consumer`**
+
+This method can be used in functional components as well.
+
+```react
+import React, { Component } from 'react'
+import { ThemeContext } from '../contexts/ThemeContext'
+
+export default class Booklist extends Component {
+  render() {
+    return (
+      <ThemeContext.Consumer>
+        {(context) => {
+          // Object destructuring
+          const { isLightTheme, light, dark } = context
+          const theme = isLightTheme ? light : dark
+          return (
+            <div className="book-list"  style={{color: theme.syntax, background: theme.bg}}>
+              <ul>
+                <li style={{background: theme.ui}}>the way of kings</li>
+                <li style={{background: theme.ui}}>the name of the wind</li>
+                <li style={{background: theme.ui}}>the final empire</li>
+              </ul>
+            </div>
+          )          
+        }}        
+      </ThemeContext.Consumer>
+    )
+  }
+}
+```
 
