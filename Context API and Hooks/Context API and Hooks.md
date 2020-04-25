@@ -1,3 +1,5 @@
+[TOC]
+
 # Context API
 
 ### Why to use?
@@ -16,7 +18,7 @@ A clean and easy way to share state between components.
 
 
 
-### Its alternatives
+### Its alternatives - ways to share data between components
 
 This is the alternative to
 
@@ -28,4 +30,93 @@ This is the alternative to
 
 
 ### Different ways to use Context API
+
+#### Using Class Component
+
+##### **<u>i. Create a ThemeContext.js file.</u>**
+
+**`ThemeContext.js`**
+
+```jsx
+import React, { createContext, Component } from 'react'
+
+export const ThemeContext = createContext()
+
+export default class ThemeContextProvider extends Component {
+    state = {
+        isLightTheme: true,
+        light: { syntax: '#555', ui: '#ddd', bg: '#eee' },
+        dark: { syntax: '#ddd', ui: '#333', bg: '#555' }
+    }
+    render() {
+        return (
+            // We are using children props here. The value from the ThemeContext.Provider will be available to all its childrens.
+            <ThemeContext.Provider value={{...this.state}}>
+                {this.props.children}
+            </ThemeContext.Provider>
+        )
+    }
+}
+```
+
+
+
+`**App.js**`
+
+```jsx
+import React from 'react';
+import Navbar from './components/Navbar'
+import Booklist from './components/Booklist';
+import ThemeContextProvider from './contexts/ThemeContext';
+
+function App() {
+  return (
+    <div className="App">
+      <ThemeContextProvider>
+        <Navbar />
+        <Booklist />
+      </ThemeContextProvider>
+    </div>
+  );
+}
+
+export default App;
+```
+
+After this, you can access the state object from ThemeContext globally. (Use React Developer Tool)
+
+
+
+##### <u>**ii. To access/consume the state:**</u>
+
+**`Navbar.js`**
+
+```react
+import React, { Component } from 'react'
+import { ThemeContext } from '../contexts/ThemeContext'
+
+export default class Navbar extends Component {
+  // To access/consume a context.
+  static contextType = ThemeContext
+  render() {
+    // Object destructuring
+    const { isLightTheme, light, dark } = this.context
+    const theme = isLightTheme ? light : dark
+
+    return (
+      <>
+        <nav style={{color: theme.syntax, background: theme.ui}}>
+          <h1>Context App</h1>
+          <ul>
+            <li>Home</li>
+            <li>About</li>
+            <li>Contact</li>
+          </ul>
+        </nav>
+      </>
+    )
+  }
+}
+```
+
 
