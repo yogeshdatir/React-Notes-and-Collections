@@ -155,3 +155,88 @@ export default class Booklist extends Component {
 }
 ```
 
+
+
+###### **<u>iii. To update the state:</u>**
+
+​	Add the required function to update the state.
+
+​	Send the function through the value prop.
+
+**`ThemeContext.js`**
+
+``` react
+import React, { createContext, Component } from 'react'
+
+export const ThemeContext = createContext()
+
+export default class ThemeContextProvider extends Component {
+    state = {
+        isLightTheme: true,
+        light: { syntax: '#555', ui: '#ddd', bg: '#eee' },
+        dark: { syntax: '#ddd', ui: '#333', bg: '#555' }
+    }
+
+    toggleTheme = () => {
+        this.setState({ isLightTheme: !this.state.isLightTheme })
+    }
+
+    render() {
+        return (
+            // We are using children props here. The value from the ThemeContext.Provider will be available to all its childrens.
+            <ThemeContext.Provider value={{...this.state, toggleTheme: this.toggleTheme}}>
+                {this.props.children}
+            </ThemeContext.Provider>
+        )
+    }
+}
+
+```
+
+Create ThemeToggle.js
+
+​	Handle the change with user input.
+
+```react
+import React, { Component } from 'react'
+import { ThemeContext } from '../contexts/ThemeContext'
+
+export default class ThemeToggle extends Component {
+    static contextType = ThemeContext
+
+    render() {
+        const { toggleTheme } = this.context
+
+        return (
+            <button onClick={toggleTheme}>Toggle Theme</button>
+        )
+    }
+}
+
+```
+
+Update the UI
+
+```react
+import React from 'react';
+import Navbar from './components/Navbar'
+import Booklist from './components/Booklist';
+import ThemeContextProvider from './contexts/ThemeContext';
+import ThemeToggle from './components/ThemeToggle';
+
+function App() {
+  return (
+    <div className="App">
+      <ThemeContextProvider>
+        <Navbar />
+        <Booklist />
+        // Add button
+        <ThemeToggle />
+      </ThemeContextProvider>
+    </div>
+  );
+}
+
+export default App;
+```
+
