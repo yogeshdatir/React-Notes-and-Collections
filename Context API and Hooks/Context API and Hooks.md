@@ -2,7 +2,7 @@
 
 # Context API
 
-### Why to use?
+## Why to use?
 
 React Context API is a way to essentially create global variables that can be passed around in a React app.
 
@@ -18,9 +18,9 @@ A clean and easy way to share state between components.
 
 
 
-### Its alternatives - ways to share data between components
+## Its alternatives - ways to share data between components
 
-This is the alternative to
+ContextAPI is the alternative to
 
 1. "prop drilling", or passing props from grandparent to parent to child, and so on.
 2. "deep prop drilling"
@@ -29,11 +29,13 @@ This is the alternative to
 
 
 
-### Different ways to use Context API
+## Different ways to use Context API
 
-#### Using Class Component
+### Using Class Component
 
-##### **<u>i. Create a ThemeContext.js file.</u>**
+#### **<u>i. Create a Context.</u>**
+
+Create a ThemeContext.js file.
 
 **`ThemeContext.js`**
 
@@ -85,11 +87,11 @@ export default App;
 
 After this, you can access the state object from ThemeContext globally. (Use React Developer Tool)
 
+------
 
+#### <u>**ii. To access/consume the state:**</u>
 
-##### <u>**ii. To access/consume the state:**</u>
-
-###### a. Using **`contextType`**
+##### a. Using **`contextType`**
 
 This method can be used only in class components.
 
@@ -123,7 +125,7 @@ export default class Navbar extends Component {
 }
 ```
 
-###### b. Using **`Consumer`**
+##### b. Using **`Consumer`**
 
 This method can be used in functional components as well.
 
@@ -155,9 +157,9 @@ export default class Booklist extends Component {
 }
 ```
 
+------
 
-
-###### **<u>iii. To update the state:</u>**
+#### **<u>iii. To update the state:</u>**
 
 ​	Add the required function to update the state.
 
@@ -238,5 +240,110 @@ function App() {
 }
 
 export default App;
+```
+
+------
+
+#### <u>**iv. Adding multiple Contexts**</u>
+
+**`AuthContext.js`**
+
+```react
+import React, { Component, createContext } from 'react'
+
+export const AuthContext = createContext()
+
+export default class AuthContextProvider extends Component {
+    state = {
+        isAuthenticated: true
+    }
+
+    toggleAuth = () => {
+        this.setState({ isAuthenticated: !this.state.isAuthenticated })
+    }
+
+    render() {
+        return (
+            <AuthContext.Provider value={{...this.state, toggleAuth: this.toggleAuth}}>
+                {this.props.children}
+            </AuthContext.Provider>
+        )
+    }
+}
+```
+
+**<u>`App.js`</u>**
+
+```react
+import React from 'react';
+import Navbar from './components/Navbar'
+import Booklist from './components/Booklist';
+import ThemeContextProvider from './contexts/ThemeContext';
+import ThemeToggle from './components/ThemeToggle';
+import AuthContextProvider from './contexts/AuthContext';
+
+function App() {
+  return (
+    <div className="App">
+      // Nest the Context Providers
+      <ThemeContextProvider>
+        <AuthContextProvider>
+          <Navbar />
+          <Booklist />
+          <ThemeToggle />
+        </AuthContextProvider>
+      </ThemeContextProvider>
+    </div>
+  );
+}
+
+export default App;
+```
+
+------
+
+#### <u>**v. Consuming multiple Contexts**</u>
+
+​	Two ways to consume multiple Contexts: 
+
+1. Nesting Context Consumers
+2. One of the Contexts can use contextType
+
+**`Navbar.js`**
+
+```react
+import React, { Component } from 'react'
+import { ThemeContext } from '../contexts/ThemeContext'
+import { AuthContext } from '../contexts/AuthContext'
+
+export default class Navbar extends Component {
+  // To access/consume a context.
+  static contextType = ThemeContext
+  render() {
+    // Object destructuring
+    const { isLightTheme, light, dark } = this.context
+    const theme = isLightTheme ? light : dark
+
+    return (
+      <AuthContext.Consumer>{ (authContext) => {
+        const { isAuthenticated, toggleAuth } = authContext
+        return (
+          <nav style={{color: theme.syntax, background: theme.ui}}>
+            <h1>Context App</h1>
+            <div onClick={toggleAuth}>
+              { isAuthenticated ? 'LoggedIn' : 'LoggedOut' }
+            </div>
+            <ul>
+              <li>Home</li>
+              <li>About</li>
+              <li>Contact</li>
+            </ul>
+          </nav>
+        )
+      }}
+      </AuthContext.Consumer>
+    )
+  }
+}
 ```
 
