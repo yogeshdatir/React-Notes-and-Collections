@@ -163,11 +163,64 @@
    
 
 2. useEffect() - runs a code when a component renders or re-renders.
-   - You’ve likely performed data fetching, subscriptions, or manually changing the DOM from React components before. 
-   - We call these operations “side effects” (or “effects” for short) because they can affect other components and can’t be done during rendering.
-   - The Effect Hook, `useEffect`, adds the ability to perform side effects from a function component. 
-   - It serves the same purpose as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount` in React classes, but unified into a single API.
+   - **What does `useEffect` do?** 
+
+     - By using this Hook, you tell React that your component needs to do something after render. 
+     - React will remember the function you passed (we’ll refer to it as our “effect”), and call it later after performing the DOM updates. 
+     - In this effect, we set the document title, but we could also perform data fetching or call some other imperative API. 
+
+     
+
+   - The Effect Hook, `useEffect`, adds the ability to perform side effects from a function component. It serves the same purpose as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount` in React classes, but unified into a single API. 
 
    
+
+   SongsList.js
+
+
+   ```react
+   import React, { useState, useEffect } from 'react'
+   import { v4 as uuidv4 } from 'uuid';
+   import NewSongForm from './NewSongForm';
    
-3. useContext() - consume context in a function component.
+   export default function SongList() {
+       const [songs, setSongs] = useState([
+           { title: 'something1', id: 1 },
+           { title: 'something2', id: 2 },
+           { title: 'something3', id: 3 },
+       ])
+   
+       const [age, setAge] = useState(20)
+   
+       const addSong = title => {
+           setSongs([...songs, { title , id: uuidv4() }])
+       }
+   
+       // runs if any state changes
+       useEffect(() => {
+           console.log('useEffect')
+       })
+   
+       // runs if age changes
+       useEffect(() => {
+           console.log('useEffect')
+       }, [age])
+   
+       return (
+           <div className="song-list">
+               <ul>
+                   {songs.map( song => ( <li key={song.id}>{song.title}</li> ) )}
+               </ul>
+               {/* Added prop - fucntion to handle submit */}
+               <NewSongForm addSong={addSong} />
+               <button onClick={() => {setAge(age+1)}}>Add Age: {age}</button>
+           </div>
+       )
+   }
+   ```
+
+   
+
+​		
+
+1. useContext() - consume context in a function component.
