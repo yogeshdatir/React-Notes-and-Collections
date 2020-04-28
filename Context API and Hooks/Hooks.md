@@ -221,6 +221,69 @@
 
    
 
-​		
+3. useContext() - consume context in a function component.
 
-1. useContext() - consume context in a function component.
+   
+
+   Booklist.js
+
+
+   ```react
+   import React, { Component, useContext } from 'react'
+   import { ThemeContext } from '../contexts/ThemeContext'
+   
+   export default function Booklist() {
+     // Object destructuring
+     const { isLightTheme, light, dark } = useContext(ThemeContext)
+     const theme = isLightTheme ? light : dark
+     return (
+       <div className="book-list"  style={{color: theme.syntax, background: theme.bg}}>
+         <ul>
+           <li style={{background: theme.ui}}>the way of kings</li>
+           <li style={{background: theme.ui}}>the name of the wind</li>
+           <li style={{background: theme.ui}}>the final empire</li>
+         </ul>
+       </div>
+     )    
+   }
+   ```
+
+   
+
+   useContext Hook can be called multiple times.
+
+   
+
+   NavBar.js
+
+   ```react
+   import React, { useContext } from 'react'
+   import { ThemeContext } from '../contexts/ThemeContext'
+   import { AuthContext } from '../contexts/AuthContext'
+   
+   function Navbar() {
+   
+     // Object destructuring
+     const { isLightTheme, light, dark } = useContext(ThemeContext)
+     const theme = isLightTheme ? light : dark
+     const { isAuthenticated, toggleAuth } = useContext(AuthContext)
+   
+     return (
+       <nav style={{color: theme.syntax, background: theme.ui}}>
+         <h1>Context App</h1>
+         <div onClick={toggleAuth}>
+           { isAuthenticated ? 'LoggedIn' : 'LoggedOut' }
+         </div>
+         <ul>
+           <li>Home</li>
+           <li>About</li>
+           <li>Contact</li>
+         </ul>
+       </nav>
+     )
+   }
+   
+   export default Navbar
+   ```
+
+   
