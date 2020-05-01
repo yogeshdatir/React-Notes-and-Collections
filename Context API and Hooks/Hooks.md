@@ -225,6 +225,29 @@
 
    
 
+Syntax:
+
+
+   ```react
+   const value = useContext(MyContext);
+   ```
+
+   
+
+   
+
+   - Accepts a context object (the value returned from `React.createContext`) and returns the current context value for that context. 
+     
+   - The current context value is determined by the `value` prop of the nearest `` above the calling component in the tree.
+     
+   - When the nearest `` above the component updates, this Hook will trigger a rerender with the latest context ` value ` passed to that  `MyContext` provider.
+
+   
+
+   
+
+   
+
    Booklist.js
 
 
@@ -287,3 +310,64 @@
    ```
 
    
+
+------
+
+4. useReducer()
+
+   
+
+   Syntax:
+
+   ```react
+   const [state, dispatch] = useReducer(reducer, initialArg, init);
+   ```
+
+   
+
+   
+
+   - An alternative to [`useState`](https://reactjs.org/docs/hooks-reference.html#usestate). Accepts a reducer of type `(state, action) => newState`, and returns the current state paired with a `dispatch` method. (If you’re familiar with Redux, you already know how this works.)
+     
+- `useReducer` is usually preferable to `useState` when you have complex state logic that involves multiple sub-values or when the next state depends on the previous one. 
+   
+- `useReducer` also lets you optimize performance for components that trigger deep updates because [you can pass `dispatch` down instead of callbacks](https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down).
+   
+
+   
+
+
+
+   reducer function
+
+
+   ```react
+// Reducer function boiler plate.
+// this is just a regular js function
+// state in the parameter can be interpreted as previous state.
+// action object contains type and payload property same as redux action.
+   
+export const reducerName = (state, action) => {
+   switch(action.type) {
+       case 'ACTION_NAME':
+           // just return the state after performing operation
+           return (new state)
+       case 'ACTION_NAME2':
+           return (new state)
+       default: 
+           return state
+   }
+}
+   ```
+
+   
+
+   dispatch method
+
+
+   ```react
+   dispatch({type: 'ACTION_NAME', payload: payload})
+   ```
+
+   
+

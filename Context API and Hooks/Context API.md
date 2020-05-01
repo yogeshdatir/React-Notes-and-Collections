@@ -549,4 +549,113 @@ export default class Navbar extends Component {
 
 ------
 
+## <u>Using useReducer() Hook</u>
+
+### Steps to implement useReducer:
+
+1. Create a reducer function (separate file e.g. bookReducer.js).
+2. Use useReducer() Hook in the context and pass dispatch as a part of value prop of the Context.Provider Component.
+3. Use dispatch in children components to manipulate the state with action object as a parameter.
+
+
+bookReducer.js
+
+```react
+// this is just a regular js function
+import { v4 as uuidv4 } from 'uuid';
+
+export const bookReducer = (state, action) => {
+    switch(action.type) {
+        case 'ADD_BOOK':
+            // just return the state after performing operation
+            return [
+                ...state, {
+                    title: action.book.title,
+                    author: action.book.author,
+                    id: uuidv4()
+                }
+            ]
+        case 'REMOVE_BOOK':
+            return state.filter(book => book.id !== action.id)
+        default: 
+            return state
+    }
+}
+```
+
+BookContext.js
+
+```react
+import React, { createContext, useReducer } from 'react'
+import {bookReducer} from '../reducers/bookReducer'
+
+export const BookContext = createContext()
+
+const BookContextProvider = (props) => {
+    const [books, dispatch] = useReducer(bookReducer, [])
+
+    return (
+        <BookContext.Provider value={{books, dispatch}}>
+            {props.children}
+        </BookContext.Provider>
+    )
+}
+
+export default BookContextProvider
+```
+
+BookForm.js
+
+```react
+import React, { useContext, useState } from 'react'
+import { BookContext } from '../contexts/BookContext'
+
+const BookForm = () => {
+    // we get dispatch from context
+    const { dispatch } = useContext(BookContext)
+
+    const [title, setTitle] = useState('')
+    const [author, setAuthor] = useState('')
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        // dispatch usage
+        dispatch({type: 'ADD_BOOK', book: {
+            title, author
+        }})
+        setTitle('')
+        setAuthor('')
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <input type="text" placeholder="Book Title" value={title} onChange={e => setTitle(e.target.value)} />
+            <input type="text" placeholder="Book Author" value={author} onChange={e => setAuthor(e.target.value)} />
+            <input type="submit" value="Add Book" />
+        </form>
+    )
+}
+
+export default BookForm
+```
+
+BookDetails.js
+
+```react
+import React, { useContext } from 'react'
+import { BookContext } from '../contexts/BookContext'
+
+const BookDetails = ({ book }) => {
+    const {dispatch} = useContext(BookContext)
+    return (
+        // dispatch usage
+        <li onClick={() => dispatch({type: 'REMOVE_BOOK', id: book.id})}>
+            <div className='title'>{book.title}</div>
+            <div className='author'>{book.author}</div>
+        </li>
+    )
+}
+
+export default BookDetails
+```
 
