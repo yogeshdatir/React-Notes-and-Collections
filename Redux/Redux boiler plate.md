@@ -1,4 +1,8 @@
-> Steps to add reducers:
+# <u>a React-Redux boiler-plate</u> 
+
+### (with Redux-thunk as a middleware)
+
+> #### Steps to add reducers:
 >
 > 1. store.js
 > 2. reducers (rootReducer and others)
@@ -6,10 +10,17 @@
 > 4. add actions and types
 > 5. use redux in components with connect() method.
 
-1. Install redux and necessary libraries.
-   `npm i redux react-redux redux-thunk redux-devtools-extension`
-2. Create src/store.js.
+## Detail Guide to create a React-Redux boiler-plate:
 
+1. Install redux and necessary libraries.
+   
+   `npm i redux react-redux redux-thunk redux-devtools-extension`
+   
+   - [React Redux](https://github.com/reduxjs/react-redux) is the official [React](https://reactjs.org/) binding for [Redux](https://redux.js.org/). It lets your React components read data from a Redux store, and dispatch actions to the store to update data.
+   - [Redux Thunk](https://github.com/reduxjs/redux-thunk): With a plain basic Redux store, you can only do simple synchronous updates by dispatching an action. Middleware extends the store's abilities, and let you write async logic that interacts with the store.
+   - [Redux Devtools Extension](https://github.com/zalmoxisus/redux-devtools-extension): to enable easy debugging and time travel.
+   
+2. Create src/store.js.
 
    ```react
    import { createStore, applyMiddleware } from 'redux';
@@ -22,9 +33,9 @@
    const middleware = [thunk];
    
    const store = createStore(
-     rootReducer,
-     initialState,
-     composeWithDevTools(applyMiddleware(...middleware)),
+    rootReducer,
+    initialState,
+    composeWithDevTools(applyMiddleware(...middleware)),
    );
    
    export default store;
